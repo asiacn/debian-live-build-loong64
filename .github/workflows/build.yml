@@ -6,12 +6,12 @@ on:
   push:
     branches: [ "master" ]
   schedule:
-    - cron: "59 12 * * 2,6"
+    - cron: "0 5,21 * * *"
   workflow_dispatch:
 jobs:
   debian:
     name: Build loong64 iso image
-    runs-on: self-hosted
+    runs-on: ubuntu-24.04
     container: 
       image: ghcr.io/loong64/debian:trixie
       options: --cpus=2 --platform linux/loong64 --privileged
