@@ -45,6 +45,16 @@ jobs:
             curl -fsSL https://salsa.debian.org/-/project/100777/uploads/67ffd6906e0fd6ea39607917e8f78655/live-build_20251022_all.deb -o live-build.deb
             apt install -y ./live-build.deb
             rm live-build.deb
+             mkdir -p config
+            cat > config/binary_rootfs <<EOF
+            LB_BINARY_ROOTFS="squashfs"
+            LB_SQUASHFS_COMPRESSION="xz"
+            LB_SQUASHFS_OPTIONS="-no-xattrs"
+            LB_FS_DISABLE_ACL="true"
+            LB_FS_DISABLE_XATTR="true"
+            EOF
+            # 7. 覆盖live-build全局配置，强制禁用xattr
+            echo 'export SQUASHFS_TOOLS_MKSQUASHFS="mksquashfs -no-xattrs -comp xz -b 1M"' >> /etc/live/build.conf
             bash -i ./build.sh --variant ${{ matrix.variant }}
             
             
